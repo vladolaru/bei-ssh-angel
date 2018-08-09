@@ -7,6 +7,7 @@
  */
 
 require_once "../utils/Form.php";
+require_once "../utils/loginFunctions.php";
 
 $login = insertHeader();
 
@@ -16,13 +17,6 @@ $form->addField('password', 'Your Password');
 
 $login .= $form->getForm();
 
-$loginView = fopen("../Views/loginView.php", "w");
-fwrite($loginView, $login);
+writeToView("../Views/loginView.php", "w", $login);
 
-header("Location: ../Views/loginView.php");
-
-function insertHeader(){
-	return "<head>
-	<title>Login</title>
-</head>";
-}
+GoToView('../Views/loginView.php');

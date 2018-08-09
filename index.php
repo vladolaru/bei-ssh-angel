@@ -6,7 +6,6 @@
  * Time: 4:14 PM
  */
 
+
+	get_current_user();
 	?>
-<html>
-<button><a href="Controllers/LoginController.php">to Login</a></button>
-</html>
