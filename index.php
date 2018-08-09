@@ -6,6 +6,10 @@
  * Time: 4:14 PM
  */
 
-
-	get_current_user();
-	?>
+include_once "utils/utilFunctions.php";
+if ( !check_session() ) {
+	header( 'Location: Views/loginView.php' );
+} else {
+	header( 'Location: Views/homeView.php' );
+}
+?>

@@ -11,6 +11,12 @@ class User {
 	protected $password;
 	protected $email;
 
+	public function __construct($username, $password, $email) {
+		$this->username = $username;
+		$this->password = $password;
+		$this->email = $email;
+	}
+
 	/**
 	 * @return mixed
 	 */

@@ -6,14 +6,17 @@
  * Time: 4:23 PM
  */
 
-require_once "../Models/class-User.php";
+include "../Models/class-User.php";
 
-function get_current_user() {
-	$currentUser = new User;
+function check_session() {
+	session_start();
+	/*if ( empty($_SESSION['currentUser']) ) {
+		return false;
+	}*/
+	$currentUser = new User('anggabard','ceapa123', 'angel@me.com');
 
 	//get data from cookie
 
-	$currentUser->setUsername('anggabard');
-	$currentUser->setPassword('ceapa123');
-	$currentUser->setEmail('angel@me.com');
+	$_SESSION['currentUser'] = $currentUser;
+	return true;
 }
