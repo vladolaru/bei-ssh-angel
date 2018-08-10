@@ -19,3 +19,18 @@ function check_session() {
 		return true;//will be false after making cookie
 	}
 }
+
+function get_header_ssh() {
+	echo '<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title is-bold">
+        SSH
+      </h1>
+      <h2 class="subtitle">
+        Santa\'s secret helptser
+      </h2>
+    </div>
+  </div>
+</section>';
+}

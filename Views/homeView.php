@@ -7,10 +7,12 @@
  */
 include "../utils/Form.php";
 include "../Models/class-User.php";
-session_start();
+include "../utils/utilFunctions.php";
+
 ?>
 <html>
 <?php
+get_header_ssh();
 $form = new Form('test', 'get');
 $form->addField('input', 'name');
 $form->showForm();
