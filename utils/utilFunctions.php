@@ -6,21 +6,27 @@
  * Time: 4:23 PM
  */
 
-include "../Models/class-User.php";
+require_once SSH_ABSPATH . "/Models/class-User.php";
 
 function check_session() {
 	//get data from cookie
-	if ( isset($_SESSION['currentUser']) ) {
+	if ( isset( $_SESSION['currentUser'] ) ) {
 		return true;
 	} else {
-		$currentUser = new User('anggabard','ceapa123', 'angel@me.com');
+		$currentUser             = new User( 'anggabard', 'ceapa123', 'angel@me.com' );
 		$_SESSION['currentUser'] = $currentUser;
+
 		return true;//will be false after making cookie
 	}
 }
 
-function get_header_ssh() {
-	echo '<section class="hero is-primary">
+function get_header_ssh( $title ) {
+	echo '<head>
+<meta charset="UTF-8">
+<title>' . $title . '</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+</head>
+<section class="hero has-background-danger">
   <div class="hero-body">
     <div class="container">
       <h1 class="title is-bold">
