@@ -1,0 +1,13 @@
+
+RewriteEngine On
+RewriteBase /bei-ssh-angel/
+
+#RewriteRule ^login/reset/(.*) index.php?view=login&action=resetpassword&userid=$1 [L]
+#
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule ^login/(.*) index.php?view=login [L]
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*) index.php [L]

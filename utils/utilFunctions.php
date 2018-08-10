@@ -6,8 +6,7 @@
  * Time: 4:23 PM
  */
 
-session_start();
-include "Models/class-User.php";
+include "../Models/class-User.php";
 
 function check_session() {
 	//get data from cookie

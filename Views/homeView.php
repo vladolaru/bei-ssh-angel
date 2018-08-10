@@ -5,10 +5,15 @@
  * Date: 8/9/2018
  * Time: 4:57 PM
  */
+
+if ( ! defined('SSH_ABSPATH' ) ) {
+    die;
+}
+
 include "../utils/Form.php";
-include "../Models/class-User.php";
 include "../utils/utilFunctions.php";
 
+session_start();
 ?>
 <html>
 <?php
