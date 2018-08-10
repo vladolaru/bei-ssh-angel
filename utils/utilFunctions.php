@@ -6,17 +6,16 @@
  * Time: 4:23 PM
  */
 
-include "../Models/class-User.php";
+session_start();
+include "Models/class-User.php";
 
 function check_session() {
-	session_start();
-	/*if ( empty($_SESSION['currentUser']) ) {
-		return false;
-	}*/
-	$currentUser = new User('anggabard','ceapa123', 'angel@me.com');
-
 	//get data from cookie
-
-	$_SESSION['currentUser'] = $currentUser;
-	return true;
+	if ( isset($_SESSION['currentUser']) ) {
+		return true;
+	} else {
+		$currentUser = new User('anggabard','ceapa123', 'angel@me.com');
+		$_SESSION['currentUser'] = $currentUser;
+		return true;//will be false after making cookie
+	}
 }

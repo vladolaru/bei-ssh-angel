@@ -6,7 +6,8 @@
  * Time: 4:14 PM
  */
 
-include_once "utils/utilFunctions.php";
+include "utils/utilFunctions.php";
+
 if ( !check_session() ) {
 	header( 'Location: Views/loginView.php' );
 } else {
