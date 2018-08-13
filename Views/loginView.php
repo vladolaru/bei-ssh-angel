@@ -19,19 +19,19 @@ get_header_ssh( 'LogIn' );
             <div class='columns'>
                 <div class="column is-flex is-horizontal-center">
 					<?php
-                    if ( ! empty( $error_message ) ) {
-                        echo '<p>' . $error_message . '</p>';
+                    if ( ! empty( $message ) ) {
+	                    echo "<script type='text/javascript'>alert(\"$message\");</script>";
                     }
 					$form = new Form(BASE_URL . '/?action=log-user-in','post' );
 
-					$form->addField( 'email', 'email' );
-					$form->addField( 'password', 'password' );
-					$form->addField( 'submit' );
+					$form->addField( 'email', 'email', [] );
+					$form->addField( 'password', 'password',[] );
+					$form->addField( 'submit' , null ,[]);
+					$form->addLink(BASE_URL . '/?action=ForgotPass','Forgot Password?');
+					$form->addLink(BASE_URL . '/?action=Register', 'Register a new account');
 					$form->showForm();
 
-
 					?>
-                    <html>
                 </div>
             </div>
         </div>

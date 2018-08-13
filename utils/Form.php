@@ -10,7 +10,6 @@ include "Field.php";
 
 class Form {
 	protected $form;
-	protected $fields;
 
 	public function __construct( $action, $method ) {
 		$this->form = "\r\n<form action= \"$action\" method=\"$method\">";
@@ -20,11 +19,23 @@ class Form {
 		$this->form .= "\r\n</form>";
 	}
 
-	public function addField( $type, $name = null) {
-		$newField = new Field( $type, $name );
+	public function addField( $type, $name = null, $optionalArgs) {
+		$newField = new Field( $type, $name, $optionalArgs );
 
-		$this->fields["$name"] = $newField;
 		$this->form .= "\r\n$name" . $newField->showField();
+	}
+
+	public function addLink($action, $name) {
+		$this->form .= "\r\n<a href='$action'>$name</a>";
+	}
+
+	public function addText ($text) {
+		$this->form .= "\r\n<p>$text</p>";
+
+	}
+
+	public function addNewLine () {
+		$this->form .= "<br>";
 	}
 
 	public function showForm() {

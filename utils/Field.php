@@ -7,20 +7,21 @@
  */
 
 class Field {
-	protected $name;
-	protected $type;
 	protected $field;
 
-	public function __construct( $type, $name ) {
+	public function __construct( $type, $name ,$optionalArgs ) {
 		$this->field = "\r\n<br><input type=\"$type\"";
-		$this->type  = $type;
 
-		if ( $name === null ) {
-			$this->field .= '>';
-		} else {
-			$this->name  = $name;
-			$this->field .= "name=\"$name\">";
+		if ($name !== null) {
+			$name = str_replace(' ', '_', $name);
+			$this->field .= ' name=' . $name;
 		}
+
+		foreach ($optionalArgs as $arg) {
+			$this->field .= ' ' . $arg;
+		}
+
+		$this->field .= '>';
 	}
 
 	protected function closeField() {

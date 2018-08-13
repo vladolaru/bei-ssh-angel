@@ -14,6 +14,7 @@ require_once SSH_ABSPATH . "/utils/utilFunctions.php";
 <html>
 <?php
 get_header_ssh('home');
+//email and pass are in cookie
 ?>
 <button>Persons</button>
 <button>Rounds</button>
