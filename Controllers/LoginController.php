@@ -6,17 +6,9 @@
  * Time: 11:47 AM
  */
 
-require_once "../utils/Form.php";
-require_once "../utils/loginFunctions.php";
+if ( ! defined('SSH_ABSPATH' ) ) {
+	die;
+}
 
-$login = insertHeader();
+echo $_GET['email'] . ' ' . $_POST['password'];
 
-$form = new Form('test.php', 'post');
-$form->addField('input', 'Your Email Address');
-$form->addField('password', 'Your Password');
-
-$login .= $form->getForm();
-
-writeToView("../Views/loginView.php", "w", $login);
-
-GoToView('../Views/loginView.php');

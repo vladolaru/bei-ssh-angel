@@ -19,14 +19,19 @@ get_header_ssh( 'LogIn' );
             <div class='columns'>
                 <div class="column is-flex is-horizontal-center">
 					<?php
-					$form = new Form( '../Controllers/LoginController.php', 'post' );
+                    if ( ! empty( $error_message ) ) {
+                        echo '<p>' . $error_message . '</p>';
+                    }
+					$form = new Form(BASE_URL . '/?action=log-user-in','post' );
 
-					$form->addField( 'intput', 'email' );
+					$form->addField( 'email', 'email' );
 					$form->addField( 'password', 'password' );
+					$form->addField( 'submit' );
 					$form->showForm();
 
+
 					?>
-                    <html
+                    <html>
                 </div>
             </div>
         </div>

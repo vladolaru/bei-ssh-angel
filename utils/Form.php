@@ -20,7 +20,7 @@ class Form {
 		$this->form .= "\r\n</form>";
 	}
 
-	public function addField( $type, $name ) {
+	public function addField( $type, $name = null) {
 		$newField = new Field( $type, $name );
 
 		$this->fields["$name"] = $newField;

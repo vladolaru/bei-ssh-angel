@@ -9,21 +9,12 @@
 if ( ! defined('SSH_ABSPATH' ) ) {
     die;
 }
-
-include "../utils/Form.php";
-include "../utils/utilFunctions.php";
-
-session_start();
+require_once SSH_ABSPATH . "/utils/utilFunctions.php";
 ?>
 <html>
 <?php
-get_header_ssh();
-$form = new Form('test', 'get');
-$form->addField('input', 'name');
-$form->showForm();
-
-$curUser = $_SESSION['currentUser'];
-
-echo $curUser->getUsername();
+get_header_ssh('home');
 ?>
+<button>Persons</button>
+<button>Rounds</button>
  </html>
