@@ -14,7 +14,7 @@ function RedirectToView( $view ) {
 }
 
 function CheckUserCredentials( $email, $password ) {
-	if (!userExists($email,$password)) {
+	if ( ! userExists( $email, $password ) ) {
 		return false;
 	}
 
@@ -24,22 +24,24 @@ function CheckUserCredentials( $email, $password ) {
 	return true;
 }
 
-function sendPasswordResetEmail ( $email ) {
-	if (! emailExists($email)) {
+function sendPasswordResetEmail( $email ) {
+	if ( ! emailExists( $email ) ) {
 		return false;
 	}
 
 	$randomString = generateRandomString();
 
-	if(
-		mail( $email, 'Reset Email' , 'Your reset email is: 
-	' . BASE_URL . '/?action=pass-reset-link&email=' . $email . '&token=' . $randomString, 'From: SSH_angel')
+	if (
+	mail( $email, 'Reset Email', 'Your reset email is: 
+	' . BASE_URL . '/?action=pass-reset-link&email=' . $email . '&token=' . $randomString, 'From: SSH_angel' )
 	) {
 		$db = getDB();
 
-		$db->update('users', ['token' => $randomString], ['email[=]' => $email]);
+		$db->update( 'users', [ 'token' => $randomString ], [ 'email[=]' => $email ] );
+
 		return true;
 	}
+
 	return false;
 
 }

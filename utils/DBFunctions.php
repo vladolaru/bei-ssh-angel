@@ -7,6 +7,7 @@
  */
 
 require_once SSH_ABSPATH . '/vendor/autoload.php';
+
 use Medoo\Medoo;
 
 function getDB() {
@@ -24,6 +25,7 @@ function getDB() {
 	] );
 
 	$GLOBALS['DB'] = $database;
+
 	return $database;
 }
 
@@ -44,13 +46,13 @@ function userExists( $email, $password ) {
 	return true;
 }
 
-function emailExists ( $email ) {
+function emailExists( $email ) {
 	$database = getDB();
 
 	if ( empty( $database->select( "users", [
 		"email"
 	], [
-		"email[=]"    => $email,
+		"email[=]" => $email,
 	] ) )
 	) {
 		return false;
@@ -59,26 +61,27 @@ function emailExists ( $email ) {
 	return true;
 }
 
-function checkEmailToken ($email, $token) {
+function checkEmailToken( $email, $token ) {
 	$database = getDB();
 
-	$user = $database->select('users',[
+	$user = $database->select( 'users', [
 		"email",
 		"token"
 	], [
-		"email[=]"    => $email,
+		"email[=]" => $email,
 	] );
 
-	if ($user[0]['email'] === $email && $user[0]['token'] === $token){
+	if ( $user[0]['email'] === $email && $user[0]['token'] === $token ) {
 
 		return true;
 	}
+
 	return false;
 }
 
-function changeUserPass ($email, $newPass) {
+function changeUserPass( $email, $newPass ) {
 	$db = getDB();
 
-	$db->update('users', ['password' => $newPass], ['email[=]' => $email]);
-	$db->update('users', ['token' => null], ['email[=]' => $email]);
+	$db->update( 'users', [ 'password' => $newPass ], [ 'email[=]' => $email ] );
+	$db->update( 'users', [ 'token' => null ], [ 'email[=]' => $email ] );
 }

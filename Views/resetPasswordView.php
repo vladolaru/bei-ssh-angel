@@ -15,43 +15,42 @@ require_once SSH_ABSPATH . "/utils/utilFunctions.php";
 
 get_header_ssh( 'Reset Pass' );
 ?>
-	<html>
-	<style>
-		.max-width-154 {
-			max-width: 154px;
-		}
-	</style>
-	<section class='section'>
-		<div class='container max-width-154'>
-			<div class='columns'>
-				<div class="column is-flex is-horizontal-center">
+    <html>
+    <style>
+        .max-width-154 {
+            max-width: 154px;
+        }
+    </style>
+    <section class='section'>
+        <div class='container max-width-154'>
+            <div class='columns'>
+                <div class="column is-flex is-horizontal-center">
 					<?php
 					if ( ! empty( $message ) ) {
 						echo "<script type='text/javascript'>alert(\"$message\");</script>";
 					}
-					$form = new Form(BASE_URL . '/?action=reset-pass','post' );
+					$form = new Form( BASE_URL . '/?action=reset-pass', 'post' );
 
-					$form->addText('Reset your password');
+					$form->addText( 'Reset your password' );
 					$form->addNewLine();
-					$form->addField('password', 'New password',[]);
-					$form->addField('password', 'Confirm new password',[]);
-					if (isset($_GET['email'])) {
+					$form->addField( 'password', 'New password', [] );
+					$form->addField( 'password', 'Confirm new password', [] );
+					if ( isset( $_GET['email'] ) ) {
 						$email = $_GET['email'];
 					} else {
 						$email = $_POST['email'];
 					}
-					$form->addField('hidden',null,['name="email"', 'value="' . $email .'"']);
-					$form->addField('submit',null, []);
-					$form->addNewLine();
-					$form->addText('or...');
-					$form->addLink(BASE_URL . '/?action=login' ,'Log into your account');
+					$form->addField( 'hidden', null, [ 'name="email"', 'value="' . $email . '"' ] );
+					$form->addField( 'submit', null, [] );
+					$form->addText( 'or...' );
+					$form->addLink( BASE_URL . '/?action=login', 'Log into your account' );
 					$form->showForm();
 
 					?>
-				</div>
-			</div>
-		</div>
-	</section>
-	</html>
+                </div>
+            </div>
+        </div>
+    </section>
+    </html>
 <?php
 

@@ -36,7 +36,7 @@ get_header_ssh( 'Password Recovery' );
 					$form->addNewLine();
 
 					$form->addField( 'email', 'Your email address', [] );
-					$form->addField( 'submit',null , []);
+					$form->addField( 'submit', null, [] );
 					$form->addNewLine();
 
 					$form->addText( 'or...' );
