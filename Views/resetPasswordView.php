@@ -35,11 +35,6 @@ get_header_ssh( 'Reset Pass' );
 					$form->addNewLine();
 					$form->addField( 'password', 'New password', [] );
 					$form->addField( 'password', 'Confirm new password', [] );
-					if ( isset( $_GET['email'] ) ) {
-						$email = $_GET['email'];
-					} else {
-						$email = $_POST['email'];
-					}
 					$form->addField( 'hidden', null, [ 'name="email"', 'value="' . $email . '"' ] );
 					$form->addField( 'submit', null, [] );
 					$form->addText( 'or...' );

@@ -27,7 +27,7 @@ get_header_ssh( 'LogIn' );
 					$form->addField( 'email', 'email', [] );
 					$form->addField( 'password', 'password', [] );
 					$form->addField( 'submit', null, [] );
-					$form->addLink( BASE_URL . '/?action=ForgotPass', 'forgot Password?' );
+					$form->addLink( BASE_URL . '/?action=forgot-pass', 'forgot Password?' );
 					$form->addLink( BASE_URL . '/?action=register', 'Register a new account' );
 					$form->showForm();
 

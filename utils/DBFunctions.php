@@ -52,7 +52,7 @@ function emailExists( $email ) {
 	if ( empty( $database->select( "users", [
 		"email"
 	], [
-		"email[=]" => $email,
+		"email[=]" => $email
 	] ) )
 	) {
 		return false;
@@ -61,38 +61,51 @@ function emailExists( $email ) {
 	return true;
 }
 
-function checkEmailToken( $email, $token ) {
+function tokenExists ($token) {
 	$database = getDB();
 
-	$user = $database->select( 'users', [
-		"email",
+	if ( empty( $database->select( "email-token", [
 		"token"
 	], [
-		"email[=]" => $email,
-	] );
-
-	if ( $user[0]['email'] === $email && $user[0]['token'] === $token ) {
-
-		return true;
+		"token[=]" => $token
+	] ) )
+	) {
+		return false;
 	}
 
-	return false;
+	return true;
+}
+
+function getEmailFromToken($token) {
+	$db = getDB();
+
+	$record = $db->select('email-token',[
+		"email"
+	], [
+		"token[=]" => $token
+	]);
+
+	if (empty($record)){
+		return false;
+	} else {
+		return $record[0]['email'];
+	}
 }
 
 function changeUserPass( $email, $newPass ) {
 	$db = getDB();
 
 	$db->update( 'users', [ 'password' => $newPass ], [ 'email[=]' => $email ] );
-	$db->update( 'users', [ 'token' => null ], [ 'email[=]' => $email ] );
+	$db->delete( 'email-token', [ 'email[=]' => $email ] );
 }
 
 function addUserToDatabase ($firstName, $lastName, $email, $password) {
 	$db = getDB();
 
 	$db->insert('users', [
-		"First Name" => $firstName,
-		"Last Name" => $lastName,
-		"Email" => $email,
-		"Password" => $password
+		"first name" => $firstName,
+		"last name" => $lastName,
+		"email" => $email,
+		"password" => $password
 	] );
 }

@@ -13,7 +13,7 @@ if ( ! defined( 'SSH_ABSPATH' ) ) {
 require_once SSH_ABSPATH . "/utils/Form.php";
 require_once SSH_ABSPATH . "/utils/utilFunctions.php";
 
-get_header_ssh( 'LogIn' );
+get_header_ssh( 'Register' );
 ?>
 	<html>
 	<style>
@@ -26,9 +26,6 @@ get_header_ssh( 'LogIn' );
 			<div class='columns'>
 				<div class="column is-flex is-horizontal-center">
 					<?php
-					if ( ! empty( $message ) ) {
-						echo "<script type='text/javascript'>alert(\"$message\");</script>";
-					}
 					$form = new Form( BASE_URL . '/?action=register-user', 'post' );
 
 					$form->addText('You are just one step away..');
@@ -44,7 +41,10 @@ get_header_ssh( 'LogIn' );
 					$form->addText('or..');
 					$form->addLink( BASE_URL . '/?action=Register', 'Log into your account' );
 					$form->showForm();
-
+					if ( ! empty( $message ) ) {
+						$test = "<script type='text/javascript'>alert(\"" . str_replace( "\r\n", '\\n',$message)  ."\");</script>";
+						echo $test;
+					}
 					?>
 				</div>
 			</div>

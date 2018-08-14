@@ -7,40 +7,45 @@
  */
 
 require_once "DBFunctions.php";
-require_once "utilFunctions.php";
 
-function RedirectToView( $view ) {
-	header( "Location: $view" );
+
+function addUserCookie( $email, $password ) {
+	setcookie( 'email', $email, time() + 60 * 60 * 24 * 7 );
+	setcookie( 'password', password_hash( $password, PASSWORD_DEFAULT ), time() + 60 * 60 * 24 * 7 );
 }
 
-function addUserCookie ($email, $password) {
-	setcookie( 'email', $email );
-	setcookie( 'password', password_hash( $password, PASSWORD_DEFAULT ) );
-}
 function CheckUserCredentials( $email, $password ) {
 	if ( ! userExists( $email, $password ) ) {
 		return false;
 	}
 
-	addUserCookie($email, $password);
+	addUserCookie( $email, $password );
 
 	return true;
 }
 
 function sendPasswordResetEmail( $email ) {
+	require_once "utilFunctions.php";
 	if ( ! emailExists( $email ) ) {
 		return false;
 	}
 
 	$randomString = generateRandomString();
+	while (tokenExists($randomString)) {
+		$randomString = generateRandomString();
+	}
 
 	if (
 	mail( $email, 'Reset Email', 'Your reset email is: 
-	' . BASE_URL . '/?action=pass-reset-link&email=' . $email . '&token=' . $randomString, 'From: SSH_angel' )
+	' . BASE_URL . '/?action=pass-reset-link&token=' . $randomString, 'From: SSH_angel' )
 	) {
 		$db = getDB();
 
-		$db->update( 'users', [ 'token' => $randomString ], [ 'email[=]' => $email ] );
+		$db->insert( 'email-token', [
+				'email' => $email,
+				'token' => $randomString
+			]
+		);
 
 		return true;
 	}
