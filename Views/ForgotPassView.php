@@ -44,11 +44,8 @@ get_header_ssh( 'Password Recovery' );
 
 					$form->addLink( BASE_URL . '/?action=login', 'log into your account' );
 					$form->showForm();
-					if ( ! empty( $error_message ) ) {
-						echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
-					}
-					if ( ! empty( $success_message ) ) {
-						echo "<script type='text/javascript'>alert(\"$success_message\");</script>";
+					if ( ! empty( $message ) ) {
+						echo "<script type='text/javascript'>alert(\"$message\");</script>";
 					}
 
 					?>

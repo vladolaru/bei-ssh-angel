@@ -23,12 +23,12 @@ get_header_ssh( 'LogIn' );
 						echo "<script type='text/javascript'>alert(\"$message\");</script>";
 					}
 					$form = new Form( BASE_URL . '/?action=log-user-in', 'post' );
-
+                    $form->addText('Get that Santa going..');
 					$form->addField( 'email', 'email', [] );
 					$form->addField( 'password', 'password', [] );
 					$form->addField( 'submit', null, [] );
-					$form->addLink( BASE_URL . '/?action=ForgotPass', 'Forgot Password?' );
-					$form->addLink( BASE_URL . '/?action=Register', 'Register a new account' );
+					$form->addLink( BASE_URL . '/?action=ForgotPass', 'forgot Password?' );
+					$form->addLink( BASE_URL . '/?action=register', 'Register a new account' );
 					$form->showForm();
 
 					?>

@@ -13,13 +13,16 @@ function RedirectToView( $view ) {
 	header( "Location: $view" );
 }
 
+function addUserCookie ($email, $password) {
+	setcookie( 'email', $email );
+	setcookie( 'password', password_hash( $password, PASSWORD_DEFAULT ) );
+}
 function CheckUserCredentials( $email, $password ) {
 	if ( ! userExists( $email, $password ) ) {
 		return false;
 	}
 
-	setcookie( 'email', $email );
-	setcookie( 'password', password_hash( $password, PASSWORD_DEFAULT ) );
+	addUserCookie($email, $password);
 
 	return true;
 }

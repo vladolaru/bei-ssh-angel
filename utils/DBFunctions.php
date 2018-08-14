@@ -85,3 +85,14 @@ function changeUserPass( $email, $newPass ) {
 	$db->update( 'users', [ 'password' => $newPass ], [ 'email[=]' => $email ] );
 	$db->update( 'users', [ 'token' => null ], [ 'email[=]' => $email ] );
 }
+
+function addUserToDatabase ($firstName, $lastName, $email, $password) {
+	$db = getDB();
+
+	$db->insert('users', [
+		"First Name" => $firstName,
+		"Last Name" => $lastName,
+		"Email" => $email,
+		"Password" => $password
+	] );
+}
