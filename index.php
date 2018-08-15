@@ -53,7 +53,6 @@ switch ( $_GET['action'] ) {
 		}
 		header( 'Location: ' . BASE_URL . '/?action=login' );
 		exit();
-
 	case 'forgot-pass':
 		require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
 		break;
@@ -63,13 +62,13 @@ switch ( $_GET['action'] ) {
 			$message = 'Check your mail!';
 			require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
 		} else {
-			$message = 'Email was not sent!';
+			$message = 'This email already has a reset link!';
 			require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
 		}
 		break;
 	case 'pass-reset-link':
-		require_once "utils/DBFunctions.php";
-		$email = getEmailFromToken( $_GET['token'] );
+		require_once SSH_ABSPATH . "/Models/class-EmailTokenModel.php";
+		$email = EmailTokenModel::getEmailFromToken( $_GET['token'] );
 		if ( $email === false ) {
 			echo 'GTFO';
 			exit();
@@ -78,9 +77,9 @@ switch ( $_GET['action'] ) {
 
 		break;
 	case 'reset-pass':
-		require_once "utils/DBFunctions.php";
+		require_once SSH_ABSPATH . "/Models/class-UserModel.php";
 		if ( $_POST['New_password'] === $_POST['Confirm_new_password'] ) {
-			changeUserPass( $_POST['email'], $_POST['New_password'] );
+			UserModel::changeUserPass( $_POST['email'], $_POST['New_password'] );
 
 			$message = 'Password was changed!';
 			header( 'Location: ' . BASE_URL . '/?action=login' );
@@ -95,7 +94,7 @@ switch ( $_GET['action'] ) {
 		require_once SSH_ABSPATH . "/Views/RegisterView.php";
 		break;
 	case 'register-user':
-		require_once "utils/DBFunctions.php";
+		require_once SSH_ABSPATH . "/Models/class-UserModel.php";
 		$message = '';
 		if ( ! ctype_alpha( $_POST['First_Name'] ) || ! ctype_alpha( $_POST['Last_Name'] ) ) {
 			$message .= 'Names must consist only of letters';
@@ -122,25 +121,25 @@ switch ( $_GET['action'] ) {
 			$message .= 'Email must consist of 3 to 20 characters';
 		}
 
-		if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+		if ( ! filter_var( $_POST['Your_email_address'], FILTER_VALIDATE_EMAIL ) ) {
 			if ( ! empty( $message ) ) {
 				$message .= "\r\n";
 			}
 			$message .= 'Invalid email';
 		}
 
-		if (emailExists($_POST['Your_email_address'])){
+		if (UserModel::emailExists($_POST['Your_email_address'])){
 			if ( ! empty( $message ) ) {
 				$message .= "\r\n";
 			}
-			$message .= '!Unavailable email';
+			$message .= 'Unavailable email';
 		}
 
 		if ( ! empty( $message ) ) {
 			require_once SSH_ABSPATH . "/Views/RegisterView.php";
 			break;
 		}
-		addUserToDatabase( $_POST['First_Name'], $_POST['Last_Name'], $_POST['Your_email_address'], $_POST['Your_password'] );
+		UserModel::addRecordToDatabase( $_POST['First_Name'], $_POST['Last_Name'], $_POST['Your_email_address'], $_POST['Your_password'] );
 		require_once SSH_ABSPATH . "/utils/loginFunctions.php";
 		addUserCookie( $_POST['Your_email_address'], $_POST['Your_password'] );
 		header( 'Location: ' . BASE_URL . '/?action=home' );

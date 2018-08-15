@@ -24,6 +24,7 @@ get_header_ssh( 'LogIn' );
 					}
 					$form = new Form( BASE_URL . '/?action=log-user-in', 'post' );
                     $form->addText('Get that Santa going..');
+                    $form->addNewLine();
 					$form->addField( 'email', 'email', [] );
 					$form->addField( 'password', 'password', [] );
 					$form->addField( 'submit', null, [] );

@@ -6,16 +6,15 @@
  * Time: 12:37 PM
  */
 
-require_once "DBFunctions.php";
-
-
 function addUserCookie( $email, $password ) {
 	setcookie( 'email', $email, time() + 60 * 60 * 24 * 7 );
 	setcookie( 'password', password_hash( $password, PASSWORD_DEFAULT ), time() + 60 * 60 * 24 * 7 );
 }
 
 function CheckUserCredentials( $email, $password ) {
-	if ( ! userExists( $email, $password ) ) {
+	require_once SSH_ABSPATH . "/Models/class-UserModel.php";
+
+	if ( ! UserModel::userExists($email, $password)  ) {
 		return false;
 	}
 
@@ -25,27 +24,21 @@ function CheckUserCredentials( $email, $password ) {
 }
 
 function sendPasswordResetEmail( $email ) {
-	require_once "utilFunctions.php";
-	if ( ! emailExists( $email ) ) {
+	require_once SSH_ABSPATH . "/Models/class-UserModel.php";
+	require_once SSH_ABSPATH . "/Models/class-EmailTokenModel.php";
+	require_once SSH_ABSPATH . "/utils/utilFunctions.php";
+	if ( ! UserModel::emailExists( $email ) ) {
 		return false;
 	}
 
 	$randomString = generateRandomString();
-	while (tokenExists($randomString)) {
+	while (EmailTokenModel::tokenExists( ($randomString))) {
 		$randomString = generateRandomString();
 	}
 
-	if (
-	mail( $email, 'Reset Email', 'Your reset email is: 
-	' . BASE_URL . '/?action=pass-reset-link&token=' . $randomString, 'From: SSH_angel' )
-	) {
-		$db = getDB();
-
-		$db->insert( 'email-token', [
-				'email' => $email,
-				'token' => $randomString
-			]
-		);
+	if (EmailTokenModel::addRecordToDatabase( $email, $randomString ) ) {
+		mail( $email, 'Reset Email', 'Your reset email is: 
+	' . BASE_URL . '/?action=pass-reset-link&token=' . $randomString, 'From: SSH_angel' );
 
 		return true;
 	}
