@@ -7,8 +7,22 @@
  */
 
 function addUserCookie( $email, $password ) {
+	require_once SSH_ABSPATH . "/Models/class-UserModel.php";
 	setcookie( 'email', $email, time() + 60 * 60 * 24 * 7 );
 	setcookie( 'password', password_hash( $password, PASSWORD_DEFAULT ), time() + 60 * 60 * 24 * 7 );
+	setcookie( 'first_name', UserModel::getFirstNameFromEmail($email) , time() + 60 * 60 * 24 * 7 );
+	setcookie( 'last_name', UserModel::getLastNameFromEmail($email), time() + 60 * 60 * 24 * 7 );
+}
+
+function removerUserCookie(){
+	unset($_COOKIE['email']);
+	setcookie('email', null,-1);
+	unset($_COOKIE['password']);
+	setcookie('password', null, -1);
+	unset($_COOKIE['first_name']);
+	setcookie('first_name', null, -1);
+	unset($_COOKIE['last_name']);
+	setcookie('last_name', null, -1);
 }
 
 function CheckUserCredentials( $email, $password ) {

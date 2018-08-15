@@ -46,10 +46,30 @@ class UserModel {
 
 	public static function addRecordToDatabase( $firstName, $lastName, $email, $password ) {
 		Database::getDB()->insert( 'users', [
-			"first name" => $firstName,
-			"last name"  => $lastName,
+			"first_name" => $firstName,
+			"last_name"  => $lastName,
 			"email"      => $email,
 			"password"   => $password
 		] );
+	}
+
+	public static function getFirstNameFromEmail($email) {
+		$firstName = Database::getDB()->select("users", [
+			"first_name"
+		] , [
+			"email[=]" => $email
+		]);
+
+		return $firstName[0]['first_name'];
+	}
+
+	public static function getLastNameFromEmail($email) {
+		$lastName = Database::getDB()->select("users", [
+			"last_name"
+		] , [
+			"email[=]" => $email
+		]);
+
+		return $lastName[0]['last_name'];
 	}
 }

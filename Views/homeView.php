@@ -12,10 +12,15 @@ if ( ! defined('SSH_ABSPATH' ) ) {
 require_once SSH_ABSPATH . "/utils/utilFunctions.php";
 ?>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+</head>
+<body>
 <?php
-get_header_ssh('home');
-//email and pass are in cookie
+get_Home_header_ssh();
+// implement home
 ?>
-<button>Persons</button>
-<button>Rounds</button>
+</body>
  </html>

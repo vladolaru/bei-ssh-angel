@@ -55,4 +55,3 @@ get_header_ssh( 'Password Recovery' );
     </section>
     </html>
 <?php
-

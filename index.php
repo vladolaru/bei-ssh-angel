@@ -23,102 +23,111 @@ define( 'BASE_URL', 'http://ceapa.local/bei-ssh-angel' );
 
 }*/
 
-
 if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
-	$_GET['action'] = 'home';//cand esti logat, esti redirectionat spre home ORICE ai face
-} else {
-	if ( ! isset( $_GET['action'] ) ) {//home is accesible
-		$_GET['action'] = 'login';
+	if ( ! isset( $_GET['action'] ) ) {
+		$_GET['action'] = 'home';
 	}
-}
-
-switch ( $_GET['action'] ) {
-	case 'login':
-		require_once SSH_ABSPATH . "/Views/loginView.php";
-		break;
-	case 'log-user-in':
-		require_once SSH_ABSPATH . "/utils/loginFunctions.php";
-		if ( checkUserCredentials( $_POST['email'], $_POST['password'] ) ) {
-			header( 'Location: ' . BASE_URL . '/?action=home' );
-			exit();
-		} else {
-			$message = 'Login details were invalid!';
-			require_once SSH_ABSPATH . "/Views/loginView.php";
-		}
-		break;
-	case 'home':
-		if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
-			require_once SSH_ABSPATH . "/Views/homeView.php";
-			break;
-		}
-		header( 'Location: ' . BASE_URL . '/?action=login' );
-		exit();
-	case 'forgot-pass':
-		require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
-		break;
-	case 'send-reset-email':
-		require_once SSH_ABSPATH . "/utils/loginFunctions.php";
-		if ( sendPasswordResetEmail( $_POST['Your_email_address'] ) ) {
-			$message = 'Check your mail!';
-			require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
-		} else {
-			$message = 'This email already has a reset link!';
-			require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
-		}
-		break;
-	case 'pass-reset-link':
-		require_once SSH_ABSPATH . "/Models/class-EmailTokenModel.php";
-
-		if ( EmailTokenModel::getEmailFromToken( $_GET['token'] ) === false ) {
-			echo 'GTFO';
-			exit();
-		}
-		require_once SSH_ABSPATH . '/Views/resetPasswordView.php';
-
-		break;
-	case 'reset-pass':
-		require_once SSH_ABSPATH . "/Models/class-UserModel.php";
-		require_once SSH_ABSPATH . "/Models/class-EmailTokenModel.php";
-		require_once SSH_ABSPATH . "/utils/registerFunctions.php";
-		$message = '';
-		if ( ! ( $_POST['New_password'] === $_POST['Confirm_new_password'] ) ) {
-			$message = 'Passwords do not match!';
-			require_once SSH_ABSPATH . "/Views/resetPasswordView.php";
-			break;
-		}
-		checkPass( $message, $_POST['New_password'] );
-		if ( empty( $message ) ) {
-			checkPass( $message, $_POST['Confirm_new_password'] );
-		}
-		if ( empty( $message ) ) {
-			UserModel::changeUserPass( EmailTokenModel::getEmailFromToken( $_GET['token'] ), $_POST['New_password'] );
+	switch ( $_GET['action'] ) {
+		case 'log-out':
+			require_once SSH_ABSPATH . "/utils/loginFunctions.php";
+			removerUserCookie();
 			header( 'Location: ' . BASE_URL . '/?action=login' );
 			exit();
-		} else {
-			require_once SSH_ABSPATH . "/Views/resetPasswordView.php";
-		}
-		break;
-	case 'register':
-		require_once SSH_ABSPATH . "/Views/RegisterView.php";
-		break;
-	case 'register-user':
-		require_once SSH_ABSPATH . "/Models/class-UserModel.php";
-		require_once SSH_ABSPATH . "/utils/registerFunctions.php";
-		$message = '';
-		checkName( $message, $_POST['First_Name'] );
-		checkName( $message, $_POST['Last_Name'] );
-		checkPass( $message, $_POST['Your_password'] );
-		checkEmail( $message, $_POST['Your_email_address'] );
+		default:
+			if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
+				require_once SSH_ABSPATH . "/Views/homeView.php";
+				break;
+			}
+			header( 'Location: ' . BASE_URL . '/?action=login' );
+			exit();//home
+	}
+} else {
 
-		if ( ! empty( $message ) ) {
+	if ( ! isset( $_GET['action'] ) ) {
+		$_GET['action'] = 'login';
+	}
+
+	switch ( $_GET['action'] ) {
+		case 'log-user-in':
+			require_once SSH_ABSPATH . "/utils/loginFunctions.php";
+			if ( checkUserCredentials( $_POST['email'], $_POST['password'] ) ) {
+				header( 'Location: ' . BASE_URL . '/?action=home' );
+				exit();
+			} else {
+				$message = 'Login details were invalid!';
+				require_once SSH_ABSPATH . "/Views/loginView.php";
+			}
+			break;
+		case 'forgot-pass':
+			require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
+			break;
+		case 'send-reset-email':
+			require_once SSH_ABSPATH . "/utils/loginFunctions.php";
+			if ( sendPasswordResetEmail( $_POST['Your_email_address'] ) ) {
+				$message = 'Check your mail!';
+				require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
+			} else {
+				$message = 'This email already has a reset link!';
+				require_once SSH_ABSPATH . "/Views/ForgotPassView.php";
+			}
+			break;
+		case 'pass-reset-link':
+			require_once SSH_ABSPATH . "/Models/class-EmailTokenModel.php";
+
+			if ( EmailTokenModel::getEmailFromToken( $_GET['token'] ) === false ) {
+				echo 'GTFO';
+				exit();
+			}
+			require_once SSH_ABSPATH . '/Views/resetPasswordView.php';
+
+			break;
+		case 'reset-pass':
+			require_once SSH_ABSPATH . "/Models/class-UserModel.php";
+			require_once SSH_ABSPATH . "/Models/class-EmailTokenModel.php";
+			require_once SSH_ABSPATH . "/utils/registerFunctions.php";
+			$message = '';
+			if ( ! ( $_POST['New_password'] === $_POST['Confirm_new_password'] ) ) {
+				$message = 'Passwords do not match!';
+				require_once SSH_ABSPATH . "/Views/resetPasswordView.php";
+				break;
+			}
+			checkPass( $message, $_POST['New_password'] );
+			if ( empty( $message ) ) {
+				checkPass( $message, $_POST['Confirm_new_password'] );
+			}
+			if ( empty( $message ) ) {
+				UserModel::changeUserPass( EmailTokenModel::getEmailFromToken( $_GET['token'] ), $_POST['New_password'] );
+				header( 'Location: ' . BASE_URL . '/?action=login' );
+				exit();
+			} else {
+				require_once SSH_ABSPATH . "/Views/resetPasswordView.php";
+			}
+			break;
+		case 'register':
 			require_once SSH_ABSPATH . "/Views/RegisterView.php";
 			break;
-		}
-		UserModel::addRecordToDatabase( $_POST['First_Name'], $_POST['Last_Name'], $_POST['Your_email_address'], $_POST['Your_password'] );
-		require_once SSH_ABSPATH . "/utils/loginFunctions.php";
-		addUserCookie( $_POST['Your_email_address'], $_POST['Your_password'] );
-		header( 'Location: ' . BASE_URL . '/?action=home' );
-		exit();
+		case 'register-user':
+			require_once SSH_ABSPATH . "/Models/class-UserModel.php";
+			require_once SSH_ABSPATH . "/utils/registerFunctions.php";
+			$message = '';
+			checkName( $message, $_POST['First_Name'] );
+			checkName( $message, $_POST['Last_Name'] );
+			checkPass( $message, $_POST['Your_password'] );
+			checkEmail( $message, $_POST['Your_email_address'] );
+
+			if ( ! empty( $message ) ) {
+				require_once SSH_ABSPATH . "/Views/RegisterView.php";
+				break;
+			}
+			UserModel::addRecordToDatabase( $_POST['First_Name'], $_POST['Last_Name'], $_POST['Your_email_address'], $_POST['Your_password'] );
+			require_once SSH_ABSPATH . "/utils/loginFunctions.php";
+			addUserCookie( $_POST['Your_email_address'], $_POST['Your_password'] );
+			header( 'Location: ' . BASE_URL . '/?action=home' );
+			exit();
+		default:
+			require_once SSH_ABSPATH . "/Views/loginView.php";
+			break;//login
+	}
 }
 print_r( $_GET );
 print_r( $_POST );
