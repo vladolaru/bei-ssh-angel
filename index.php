@@ -68,8 +68,8 @@ switch ( $_GET['action'] ) {
 		break;
 	case 'pass-reset-link':
 		require_once SSH_ABSPATH . "/Models/class-EmailTokenModel.php";
-		$email = EmailTokenModel::getEmailFromToken( $_GET['token'] );
-		if ( $email === false ) {
+
+		if ( EmailTokenModel::getEmailFromToken( $_GET['token'] ) === false ) {
 			echo 'GTFO';
 			exit();
 		}
@@ -78,62 +78,37 @@ switch ( $_GET['action'] ) {
 		break;
 	case 'reset-pass':
 		require_once SSH_ABSPATH . "/Models/class-UserModel.php";
-		if ( $_POST['New_password'] === $_POST['Confirm_new_password'] ) {
-			UserModel::changeUserPass( $_POST['email'], $_POST['New_password'] );
-
-			$message = 'Password was changed!';
+		require_once SSH_ABSPATH . "/Models/class-EmailTokenModel.php";
+		require_once SSH_ABSPATH . "/utils/registerFunctions.php";
+		$message = '';
+		if ( ! ( $_POST['New_password'] === $_POST['Confirm_new_password'] ) ) {
+			$message = 'Passwords do not match!';
+			require_once SSH_ABSPATH . "/Views/resetPasswordView.php";
+			break;
+		}
+		checkPass( $message, $_POST['New_password'] );
+		if ( empty( $message ) ) {
+			checkPass( $message, $_POST['Confirm_new_password'] );
+		}
+		if ( empty( $message ) ) {
+			UserModel::changeUserPass( EmailTokenModel::getEmailFromToken( $_GET['token'] ), $_POST['New_password'] );
 			header( 'Location: ' . BASE_URL . '/?action=login' );
 			exit();
 		} else {
-			$message = 'Passwords do not match!';
 			require_once SSH_ABSPATH . "/Views/resetPasswordView.php";
 		}
-
 		break;
 	case 'register':
 		require_once SSH_ABSPATH . "/Views/RegisterView.php";
 		break;
 	case 'register-user':
 		require_once SSH_ABSPATH . "/Models/class-UserModel.php";
+		require_once SSH_ABSPATH . "/utils/registerFunctions.php";
 		$message = '';
-		if ( ! ctype_alpha( $_POST['First_Name'] ) || ! ctype_alpha( $_POST['Last_Name'] ) ) {
-			$message .= 'Names must consist only of letters';
-		}
-
-		if ( strlen( $_POST['First_Name'] ) > 20 || strlen( $_POST['First_Name'] ) < 1 || strlen( $_POST['Last_Name'] ) > 20 || strlen( $_POST['Last_Name'] ) < 1 ) {
-			if ( ! empty( $message ) ) {
-				$message .= "\r\n";
-			}
-			$message .= 'Names must consist of 1 to 20 characters';
-		}
-
-		if ( strlen( $_POST['Your_password'] ) < 4 || strlen( $_POST['Your_password'] ) > 20 ) {
-			if ( ! empty( $message ) ) {
-				$message .= "\r\n";
-			}
-			$message .= 'Password must consist of 4 to 20 characters';
-		}
-
-		if ( strlen( $_POST['Your_email_address']) > 30 || strlen( $_POST['Your_email_address']) < 3 ) {
-			if ( ! empty( $message ) ) {
-				$message .= "\r\n";
-			}
-			$message .= 'Email must consist of 3 to 20 characters';
-		}
-
-		if ( ! filter_var( $_POST['Your_email_address'], FILTER_VALIDATE_EMAIL ) ) {
-			if ( ! empty( $message ) ) {
-				$message .= "\r\n";
-			}
-			$message .= 'Invalid email';
-		}
-
-		if (UserModel::emailExists($_POST['Your_email_address'])){
-			if ( ! empty( $message ) ) {
-				$message .= "\r\n";
-			}
-			$message .= 'Unavailable email';
-		}
+		checkName( $message, $_POST['First_Name'] );
+		checkName( $message, $_POST['Last_Name'] );
+		checkPass( $message, $_POST['Your_password'] );
+		checkEmail( $message, $_POST['Your_email_address'] );
 
 		if ( ! empty( $message ) ) {
 			require_once SSH_ABSPATH . "/Views/RegisterView.php";
@@ -144,7 +119,6 @@ switch ( $_GET['action'] ) {
 		addUserCookie( $_POST['Your_email_address'], $_POST['Your_password'] );
 		header( 'Location: ' . BASE_URL . '/?action=home' );
 		exit();
-		break;
 }
 print_r( $_GET );
 print_r( $_POST );
