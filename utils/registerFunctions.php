@@ -54,3 +54,12 @@ function checkEmail (&$message, $email) {
 		$message .= 'Unavailable email';
 	}
 }
+
+function checkText (&$message, $text){
+	if ( 200 < strlen( $text ) ) {
+		if ( ! empty( $message ) ) {
+			$message .= "\r\n";
+		}
+		$message .= 'No more than 200 characters for preferences or notes';
+	}
+}

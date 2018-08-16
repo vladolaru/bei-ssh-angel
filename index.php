@@ -24,22 +24,88 @@ define( 'BASE_URL', 'http://ceapa.local/bei-ssh-angel' );
 }*/
 
 if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
+
 	if ( ! isset( $_GET['action'] ) ) {
 		$_GET['action'] = 'home';
 	}
+
 	switch ( $_GET['action'] ) {
 		case 'log-out':
 			require_once SSH_ABSPATH . "/utils/loginFunctions.php";
 			removerUserCookie();
 			header( 'Location: ' . BASE_URL . '/?action=login' );
 			exit();
-		default:
-			if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
-				require_once SSH_ABSPATH . "/Views/homeView.php";
-				break;
+		case 'add-person':
+			require_once SSH_ABSPATH . "/Views/add-editPersonView.php";
+			break;
+		case 'edit-person':
+			if ( ! isset( $_GET['email'] ) ) {
+				header( 'Location: ' . BASE_URL . '/?action=home' );
+				exit();
 			}
-			header( 'Location: ' . BASE_URL . '/?action=login' );
-			exit();//home
+			require_once SSH_ABSPATH . "/utils/class-Person.php";
+			require_once SSH_ABSPATH . "/Models/class-PersonsModel.php";
+
+			$thePersonToEdit = PersonsModel::getMyPersonByEmail($_COOKIE['email'], $_GET['email']);
+
+			if ( false === $thePersonToEdit) {
+				header( 'Location: ' . BASE_URL . '/?action=home' );
+				exit();
+			}
+			require_once SSH_ABSPATH . "/Views/add-editPersonView.php";
+			break;
+		case 'update-person':
+			require_once SSH_ABSPATH . "/utils/registerFunctions.php";
+			require_once SSH_ABSPATH . "/Models/class-PersonsModel.php";
+			$message = '';
+			checkName( $message, $_POST['First_Name'] );
+			checkName( $message, $_POST['Last_Name'] );
+			checkEmail( $message, $_POST['Email_address'] );
+			checkText($message, $_POST['Personal_preferences']);
+			checkText($message, $_POST['Private_notes']);
+
+			if (PersonsModel::emailExists($_POST['Email_address'])) {
+				if ( ! empty( $message ) ) {
+					$message .= "\r\n";
+				}
+				$message .= 'Email already in use';
+			}
+
+			if ( ! empty( $message ) ) {
+				if ( $_GET['type'] === 'edit-person') {
+					header( 'Location: ' . BASE_URL . '/?action=' . $_GET['type'] .'&email=' . $_GET['emailOfThePerson'] );
+				} else if ($_GET['type'] === 'add-person') {
+					header( 'Location: ' . BASE_URL . '/?action=' . $_GET['type'] );
+				} else {
+					echo "GTFO";
+				}
+				exit();
+			}
+
+			if ($_GET['type'] === 'edit-person') {
+				PersonsModel::updatePersonForUser($_COOKIE['email'], $_GET['emailOfThePerson'], [
+					'first_name' => $_POST['First_Name'],
+					'last_name' => $_POST['Last_Name'],
+					'email' => $_POST['Email_address'],
+					'preferences' => $_POST['Personal_preferences'],
+					'notes' => $_POST['Private_notes']
+				]);
+			} else {
+				PersonsModel::addPersonForUser($_COOKIE['email'], [
+					'first_name' => $_POST['First_Name'],
+					'last_name' => $_POST['Last_Name'],
+					'email' => $_POST['Email_address'],
+					'preferences' => $_POST['Personal_preferences'],
+					'notes' => $_POST['Private_notes']
+				]);
+			}
+			header( 'Location: ' . BASE_URL . '/?action=home' );
+			break;
+		default:
+			require_once SSH_ABSPATH . "/Models/class-PersonsModel.php";
+			$myPersons = new PersonsModel($_COOKIE['email']);
+			require_once SSH_ABSPATH . "/Views/homeView.php";
+			break;//home
 	}
 } else {
 

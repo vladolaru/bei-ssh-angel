@@ -6,20 +6,6 @@
  * Time: 4:23 PM
  */
 
-require_once SSH_ABSPATH . "/Models/class-User.php";
-
-function check_session() {
-	//get data from cookie
-	if ( isset( $_SESSION['currentUser'] ) ) {
-		return true;
-	} else {
-		$currentUser             = new User( 'anggabard', 'ceapa123', 'angel@me.com' );
-		$_SESSION['currentUser'] = $currentUser;
-
-		return true;//will be false after making cookie
-	}
-}
-
 function get_header_ssh( $title ) {
 	echo '<head>
 <meta charset="UTF-8">

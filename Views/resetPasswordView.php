@@ -39,7 +39,6 @@ get_header_ssh( 'Reset Pass' );
 					$form->showForm();
 					if ( ! empty( $message ) ) {
 						$test = "<script type='text/javascript'>alert(\"" . str_replace( "\r\n", '\\n',$message)  ."\");</script>";
-						echo $test;
 					}
 					?>
                 </div>
