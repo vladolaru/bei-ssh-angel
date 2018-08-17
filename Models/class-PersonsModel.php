@@ -97,6 +97,15 @@ class PersonsModel {
 		]);
 	}
 
+	public function getEmails() {
+		$emails = array();
+		foreach ($this->getMyPersons() as $person){
+			$emails[] = $person->email;
+		}
+
+		return $emails;
+	}
+
 	public static function emailExists( $email ) {
 		if ( empty( Database::getDB()->select( "persons", [
 			"email"

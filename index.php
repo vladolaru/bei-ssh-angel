@@ -111,6 +111,74 @@ if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
 			PersonsModel::deletePersonForUser($_COOKIE['email'], $_GET['email']);
 			header( 'Location: ' . BASE_URL . '/?action=home' );
 			break;
+		case 'rounds':
+			require_once SSH_ABSPATH . "/utils/utilFunctions.php";
+			require_once SSH_ABSPATH . "/Models/class-RoundsModel.php";
+			$myRounds = new RoundsModel($_COOKIE['email']);
+			require_once SSH_ABSPATH . "/Views/RoundsView.php";
+			break;
+		case 'add-round':
+			require_once SSH_ABSPATH . "/Models/class-PersonsModel.php";
+			$PersonsModel = new PersonsModel($_COOKIE['email']);
+			$myPersonsEmails = $PersonsModel->getEmails();
+			require_once SSH_ABSPATH . "/Views/addRoundView.php";
+			break;
+		case 'create-new-round':
+			require_once SSH_ABSPATH . "/utils/class-SecretSantaCore.php";
+			$santa = new SecretSantaCoreAngel();
+			$message = '';
+			$newLine = "\r\n";
+			if(!$santa->setEmailFrom($_POST['Email_from'])){
+				if (!empty($message)){
+					$message .= $newLine;
+				}
+				$message .= 'From email is invalid';
+			}
+
+			if(!$santa->setEmailTitle($_POST['Email_title'])){
+				if (!empty($message)){
+					$message .= $newLine;
+				}
+				$message .= 'Title is invalid';
+			}
+
+			if(!$santa->setRecommendedExpenses($_POST['Recommended_budget'])){
+				if (!empty($message)){
+					$message .= $newLine;
+				}
+				$message .= 'Budget is invalid';
+			}
+
+			require_once SSH_ABSPATH . "/Models/class-PersonsModel.php";
+
+			$users = array();
+			$userPos = 0;
+			foreach ($_POST['emails'] as $email){
+				$users[$userPos]['email'] = $email;
+				$users[$userPos]['name'] = PersonsModel::getMyPersonByEmail($_COOKIE['email'], $email)->firstName . ' ' . PersonsModel::getMyPersonByEmail($_COOKIE['email'], $email)->lastName;
+				$userPos++;
+			}
+			$addedUsers = $santa->addUsers($users);
+			if ($addedUsers < $userPos){
+				if (!empty($message)){
+					$message .= $newLine;
+				}
+				$message .= $userPos - $addedUsers . ' weren\'t added';
+			}
+
+			if (!empty($message)){
+				require_once SSH_ABSPATH . "/Views/addRoundView.php";
+				break;
+			}
+
+			require_once SSH_ABSPATH . "/Models/class-RoundsModel.php";
+			require_once SSH_ABSPATH . "/utils/class-Round.php";
+
+			$round = new Round($userPos,$_POST['Recommended_budget']);
+			RoundsModel::insertRound($round, $_COOKIE['email']);
+
+			header("Location:" . BASE_URL . "\?action=home");
+			break;
 		default:
 			require_once SSH_ABSPATH . "/Models/class-PersonsModel.php";
 			$myPersons = new PersonsModel($_COOKIE['email']);

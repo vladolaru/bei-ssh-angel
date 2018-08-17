@@ -329,11 +329,20 @@ class SecretSantaCoreAngel {
 	 * @return bool
 	 */
 	protected function checkUserName( $name ) {
-		if ( ! ctype_alnum( $name ) ) {
-			return false;
+		$tempTitle = str_split($name);
+
+		foreach ($tempTitle as $char) {
+			if(( 'A' > $char || 'Z' < $char ) && ( 'a' > $char || 'z' < $char ) && ( ' ' !== $char ) ){
+				return false;
+			}
 		}
 
 		return true;
+		/*if ( ! ctype_alnum( $name ) ) {
+			return false;
+		}
+
+		return true;*/
 	}
 
 	/**

@@ -38,6 +38,20 @@ class Form {
 		$this->form .= "<br>";
 	}
 
+	public function addTextarea ($title, $name, $rows, $cols) {
+		$this->form .= "\r\n$title:<textarea name=$name rows=$rows rows=$cols></textarea>";
+	}
+
+	public function addSelect($name, $emails){
+		$options = '';
+		foreach ($emails as $email){
+			$options .= "\r\n<option value=\"$email\">$email</option>";
+		}
+		$this->form .= "<div class=\"select is-multiple\">
+  <select name='$name" . "[]'" ." multiple size=\"3\">" . $options . "</select>
+</div>";
+	}
+
 	public function showForm() {
 		$this->closeForm();
 		echo $this->form;

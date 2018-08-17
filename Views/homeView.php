@@ -57,9 +57,5 @@ require_once SSH_ABSPATH . "/utils/utilFunctions.php";
             </a>
         </div>
 </section>
-<?php
-
-
-?>
 </body>
 </html>

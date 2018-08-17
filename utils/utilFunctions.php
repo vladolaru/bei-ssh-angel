@@ -72,10 +72,10 @@ function get_Home_header_ssh() {
     <nav class=\"tabs\">
       <div class=\"container\">
         <ul class='is-pulled-right'>
-          <li class='button'><a>Persons</a></li>
+          <li class='button'><a href=". BASE_URL . "/?action=home" . " >Persons</a></li>
           &nbsp;
           &nbsp;
-          <li class='button'><a>Rounds</a></li>
+          <li class='button'><a href=". BASE_URL . "/?action=rounds" . " >Rounds</a></li>
         </ul>
       </div>
     </nav>
