@@ -61,10 +61,10 @@ if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
 			checkName( $message, $_POST['First_Name'] );
 			checkName( $message, $_POST['Last_Name'] );
 			checkEmail( $message, $_POST['Email_address'] );
-			checkText($message, $_POST['Personal_preferences']);
-			checkText($message, $_POST['Private_notes']);
+			checkText( $message, $_POST['Personal_preferences'] );
+			checkText( $message, $_POST['Private_notes'] );
 
-			if (PersonsModel::emailExists($_POST['Email_address'])) {
+			if ( PersonsModel::emailExists( $_POST['Email_address'] ) && $_POST['Email_address'] !== $_POST['emailOfThePerson'] ) {
 				if ( ! empty( $message ) ) {
 					$message .= "\r\n";
 				}
@@ -72,9 +72,9 @@ if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
 			}
 
 			if ( ! empty( $message ) ) {
-				if ( $_GET['type'] === 'edit-person') {
-					header( 'Location: ' . BASE_URL . '/?action=' . $_GET['type'] .'&email=' . $_GET['emailOfThePerson'] );
-				} else if ($_GET['type'] === 'add-person') {
+				if ( $_GET['type'] === 'edit-person' ) {
+					header( 'Location: ' . BASE_URL . '/?action=' . $_GET['type'] . '&email=' . $_POST['emailOfThePerson'] );
+				} else if ( $_GET['type'] === 'add-person' ) {
 					header( 'Location: ' . BASE_URL . '/?action=' . $_GET['type'] );
 				} else {
 					echo "GTFO";
@@ -82,23 +82,33 @@ if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
 				exit();
 			}
 
-			if ($_GET['type'] === 'edit-person') {
-				PersonsModel::updatePersonForUser($_COOKIE['email'], $_GET['emailOfThePerson'], [
-					'first_name' => $_POST['First_Name'],
-					'last_name' => $_POST['Last_Name'],
-					'email' => $_POST['Email_address'],
+			if ( $_GET['type'] === 'edit-person' ) {
+				PersonsModel::updatePersonForUser( $_COOKIE['email'], $_POST['emailOfThePerson'], [
+					'first_name'  => $_POST['First_Name'],
+					'last_name'   => $_POST['Last_Name'],
+					'email'       => $_POST['Email_address'],
 					'preferences' => $_POST['Personal_preferences'],
-					'notes' => $_POST['Private_notes']
-				]);
+					'notes'       => $_POST['Private_notes']
+				] );
 			} else {
-				PersonsModel::addPersonForUser($_COOKIE['email'], [
-					'first_name' => $_POST['First_Name'],
-					'last_name' => $_POST['Last_Name'],
-					'email' => $_POST['Email_address'],
+				PersonsModel::addPersonForUser( $_COOKIE['email'], [
+					'first_name'  => $_POST['First_Name'],
+					'last_name'   => $_POST['Last_Name'],
+					'email'       => $_POST['Email_address'],
 					'preferences' => $_POST['Personal_preferences'],
-					'notes' => $_POST['Private_notes']
-				]);
+					'notes'       => $_POST['Private_notes']
+				] );
 			}
+			header( 'Location: ' . BASE_URL . '/?action=home' );
+			break;
+		case 'delete-person':
+			if (!isset($_GET['email'])){
+				echo "GTFO";
+				die();
+			}
+			require_once SSH_ABSPATH . "/Models/class-PersonsModel.php";
+
+			PersonsModel::deletePersonForUser($_COOKIE['email'], $_GET['email']);
 			header( 'Location: ' . BASE_URL . '/?action=home' );
 			break;
 		default:

@@ -22,11 +22,25 @@ require_once SSH_ABSPATH . "/utils/utilFunctions.php";
 <?php get_Home_header_ssh(); ?>
 <body>
 <style>
+    .credentials {
+        width: 80%;
+    }
 
+    .person {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        border-style: solid;
+    }
+
+    .person-button {
+        bottom: 30px;
+       margin-left: 10px;
+    }
 </style>
 <section class='section is-centered'>
-    <div >
-
+            <div class="columns is-centered">
+                <div class="column is-horizontal-centered is-half">
 				<?php
 				if ( ! isset( $myPersons ) ) {
 					exit();
@@ -34,14 +48,14 @@ require_once SSH_ABSPATH . "/utils/utilFunctions.php";
 				foreach ( $myPersons->getMyPersons() as $onePerson ) {
 					$onePerson->showPerson();
 				}
-
 				?>
+            </div>
+    </div>
         <div class="has-text-centered">
             <a href="/bei-ssh-angel/?action=add-person">
                 <button>Add a new one</button>
             </a>
         </div>
-    </div>
 </section>
 <?php
 

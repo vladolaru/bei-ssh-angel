@@ -22,20 +22,24 @@ class Person {
 	}
 
 	public function showPerson(){
-		echo    "<div class='columns is-centered'>
-<div class=\"column is-flex is-horizontal-center is-half\">
-<div>".$this->firstName.' '.$this->lastName."&nbsp;&nbsp;&nbsp;&nbsp;"."$this->email"."&nbsp;&nbsp;&nbsp;&nbsp;".
-		        "<a href='". BASE_URL . "/?action=edit-person&email=" . "$this->email" . "' class=\"button\">
-    <span class=\"icon\">
-      <i class=\"fab fa-github\"></i>
-    </span>
-  </a> <a href='". BASE_URL . "/?action=delete-person&email="."$this->email" . "' class=\"button\">
-    <span class=\"icon\">
-      <i class=\"fab fa-twitter\"></i>
-    </span>
-  </a>
-  </div>
-  </div>
-  </div>";
+		echo
+			"<div class='person'>
+				<div class='credentials'>" .
+					$this->firstName . ' ' . $this->lastName . "&nbsp;&nbsp;&nbsp;&nbsp;" . "$this->email" .
+				"</div>" .
+				"<div>
+					<a href='" . BASE_URL . "/?action=delete-person&email=" . "$this->email" . "' class=\"button person-button is-pulled-right\">
+					    <span class=\"icon\">
+					        <i class=\"fab fa-twitter\"></i>
+					    </span>
+
+	                </a>
+					<a href='" . BASE_URL . "/?action=edit-person&email=" . "$this->email" . "' class=\"button person-button is-pulled-right\">
+		                <span class=\"icon\">
+		                    <i class=\"fab fa-github\"></i>
+		                </span>
+	                </a>
+  				</div>
+  			</div>";
 	}
 }

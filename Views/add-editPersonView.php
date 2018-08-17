@@ -46,8 +46,8 @@ require_once SSH_ABSPATH . "/Models/class-PersonsModel.php"
 				$form->addField( 'input', 'First Name', [ 'value=' . $thePersonToEdit->firstName ] );
 				$form->addField( 'input', 'Last Name', [ 'value=' . $thePersonToEdit->lastName ] );
 				$form->addField( 'email', 'Email address', [ 'value=' . $thePersonToEdit->email ] );
-				$form->addField( 'input', 'Personal preferences', [ 'value=' . $thePersonToEdit->preferences ] );
-				$form->addField( 'input', 'Private notes', [ 'value=' . $thePersonToEdit->notes ] );
+				$form->addField( 'input', 'Personal preferences', [ 'value="' . $thePersonToEdit->preferences . '"' ] );
+				$form->addField( 'input', 'Private notes', [ 'value="' . $thePersonToEdit->notes . '"' ] );
 				$form->addField( 'submit', null, [] );
 				$form->addNewLine();
 				$form->addText( 'or..' );
