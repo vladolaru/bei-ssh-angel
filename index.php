@@ -174,10 +174,19 @@ if ( isset( $_COOKIE['email'] ) && isset( $_COOKIE['password'] ) ) {
 			require_once SSH_ABSPATH . "/Models/class-RoundsModel.php";
 			require_once SSH_ABSPATH . "/utils/class-Round.php";
 
+			try {
+				$santa->goRudolph();
+			} catch (Exception $e) {
+				$message = 'Insufficient data';
+				$PersonsModel = new PersonsModel($_COOKIE['email']);
+				$myPersonsEmails = $PersonsModel->getEmails();
+				require_once SSH_ABSPATH . "/Views/addRoundView.php";
+				exit();
+			}
 			$round = new Round($userPos,$_POST['Recommended_budget']);
 			RoundsModel::insertRound($round, $_COOKIE['email']);
 
-			header("Location:" . BASE_URL . "\?action=home");
+			header("Location:" . BASE_URL . "\?action=rounds");
 			break;
 		default:
 			require_once SSH_ABSPATH . "/Models/class-PersonsModel.php";

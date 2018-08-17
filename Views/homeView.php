@@ -45,8 +45,10 @@ require_once SSH_ABSPATH . "/utils/utilFunctions.php";
 				if ( ! isset( $myPersons ) ) {
 					exit();
 				}
-				foreach ( $myPersons->getMyPersons() as $onePerson ) {
-					$onePerson->showPerson();
+				if(count($myPersons->getMyPersons()) > 0) {
+					foreach ( $myPersons->getMyPersons() as $onePerson ) {
+						$onePerson->showPerson();
+					}
 				}
 				?>
             </div>

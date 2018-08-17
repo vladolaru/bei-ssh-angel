@@ -248,7 +248,7 @@ class SecretSantaCoreAngel {
 		$noParticipants = count( $this->users );
 
 		for ( $i = 0; $i < $noParticipants - 1; $i ++ ) {
-			$random = wp_rand( $i + 1, $noParticipants - 1 );
+			$random = rand( $i + 1, $noParticipants - 1 );
 
 			$this->swap( $colleagues[ $i ], $colleagues[ $random ] );
 		}
